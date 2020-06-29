@@ -28,20 +28,22 @@ class Graph {
                 
                 ctx.moveTo(50, canvas.height - 50);
                 for(var x = 50; x < canvas.width - 50; x += 5) {
-                    if (x >= (this.points[ptIndex + 1].x - diagram.xAxis.minValue) * diagram.xScale + 50) {                        
-                        ptIndex++;
-                        interp = cubicInterpolate(this.points, ptIndex, interp);
-                    }
-                    
-                    try{
-                        var xVal = diagram.xAxis.minValue + (x - 50) / diagram.xScale;
-                        var yVal = interp.values[0] * Math.pow(xVal, 3) + interp.values[1] * Math.pow(xVal, 2) + interp.values[2] * xVal + interp.values[3];             
+                    if (ptIndex < this.points.length - 1) {
+                        if (x >= (this.points[ptIndex + 1].x - diagram.xAxis.minValue) * diagram.xScale + 50) {                        
+                            ptIndex++;
+                            interp = cubicInterpolate(this.points, ptIndex, interp);
+                        }
                         
-                        var y = canvas.height - ((yVal - diagram.yAxis.minValue) * diagram.yScale + 50);
-                        
-                        ctx.lineTo(x, y);
-                    } catch {
-                        break;
+                        try{
+                            var xVal = diagram.xAxis.minValue + (x - 50) / diagram.xScale;
+                            var yVal = interp.values[0] * Math.pow(xVal, 3) + interp.values[1] * Math.pow(xVal, 2) + interp.values[2] * xVal + interp.values[3];             
+                            
+                            var y = canvas.height - ((yVal - diagram.yAxis.minValue) * diagram.yScale + 50);
+                            
+                            ctx.lineTo(x, y);
+                        } catch {
+                            break;
+                        }
                     }
                 }                            
                 break;

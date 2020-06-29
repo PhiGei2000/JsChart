@@ -15,9 +15,7 @@ function cubicInterpolate(points, ptIndex, coe) {
             points[1].y,
             points[2].y,
             0
-        ];
-
-        return mat.getInverse().multiplyVector(vec);        
+        ];        
     }
     else if(ptIndex < points.length - 2) {        
         mat.values = [
@@ -34,6 +32,38 @@ function cubicInterpolate(points, ptIndex, coe) {
             points[ptIndex + 2].y
         ];
 
-        return mat.getInverse().multiplyVector(vec);                    
-    }    
+    }      
+    else if (ptIndex < points.length - 1) {
+        mat.values = [
+            3 * Math.pow(points[ptIndex].x, 2), 2 * points[ptIndex].x, 1, 0,
+            Math.pow(points[ptIndex].x, 3), Math.pow(points[ptIndex].x, 2), points[ptIndex].x, 1,
+            Math.pow(points[ptIndex + 1].x, 3), Math.pow(points[ptIndex + 1].x, 2), points[ptIndex + 1].x, 1,
+            Math.pow(points[ptIndex - 1].x, 3), Math.pow(points[ptIndex - 1].x, 2), points[ptIndex - 1].x, 1
+        ];
+
+        vec.values = [
+            3 * coe.values[0] * Math.pow(points[ptIndex].x, 2) + 2 * coe.values[1] * points[ptIndex].x + coe.values[2],
+            points[ptIndex].y,
+            points[ptIndex + 1].y,
+            points[ptIndex - 1].y
+        ];
+    }
+    else {
+        var lastIndex = points.length - 1;
+        
+        mat.values = [
+            Math.pow(points[lastIndex].x, 3), Math.pow(points[lastIndex].x, 2), points[lastIndex].x, 1,
+            Math.pow(points[lastIndex - 1].x, 3), Math.pow(points[lastIndex - 1].x, 2), points[lastIndex - 1].x, 1,
+            3 * Math.pow(points[ptIndex].x, 2), 2 * points[ptIndex].x, 1, 0,
+            6 * points[lastIndex].x, 2, 0, 0
+        ];
+        
+        vec.values = [
+            points[lastIndex].y, 
+            points[lastIndex - 1].y,
+            3 * coe.values[0] * Math.pow(points[ptIndex].x, 2) + 2 * coe.values[1] * points[ptIndex].x + coe.values[2],
+            0
+        ];
+    }  
+    return mat.getInverse().multiplyVector(vec);                    
 }
