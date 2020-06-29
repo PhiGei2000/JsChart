@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>JsMath</title>
+        <script type="text/javascript" src="graph.js"></script>
+        <script type="text/javascript" src="vector.js"></script>
+        <script type="text/javascript" src="axis.js"></script>
+        <script type="text/javascript" src="diagram.js"></script>
+        <script type="text/javascript" src="chart.js"></script>
+        <script type="text/javascript" src="matrix.js"></script>
+        <script type="text/javascript" src="main.js"></script>
+
+        <link rel="stylesheet" href="style.css">
+    </head>    
+    <body on="update()">
+        <canvas id="canvas" width="800" height="600"></canvas>
+        <script type="text/javascript">
+            var canvas = document.getElementById("canvas");
+            setup();      
+            
+            setInterval(function() {
+                canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
+                update();
+            }, 20);
+        </script>
+    </body>
+</html>
