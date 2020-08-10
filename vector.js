@@ -5,7 +5,8 @@ class Vector {
 
     get length() {
         return this.values.length;
-    }    
+    }   
+    
 }
 
 class Vector2 extends Vector {

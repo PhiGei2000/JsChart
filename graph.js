@@ -1,24 +1,39 @@
 class Graph {
-    constructor(pts) {
+    constructor(pts, name = "") {
         this.points = pts;
         this.interpolate = "linear";
+        this.style = new Style();
+        this.name = name;
     }
 
     draw(canvas, diagram) {
         var ctx = canvas.getContext("2d");
         // draw graph
-        ctx.beginPath();        
+        ctx.beginPath();       
+        ctx.strokeStyle = this.style.lineColor;
+        ctx.lineWidth = this.style.lineWidth;
+        ctx.fillStyle = this.style.lineColor;
         
         switch(this.interpolate) {
             case "linear":
+                for(var i = 0; i < this.points.length; i++) {
+                    var p = diagram.pointToPixel(this.points[i]);
+                    
+                    if(i == 0) {
+                        ctx.moveTo(p.x, p.y);
+                    }
+                    else {                                    
+                        ctx.lineTo(p.x, p.y);
+                    }
                 
-                var x = (this.points[0].x - diagram.xAxis.minValue) * diagram.xScale + 50;
-                var y = canvas.height - ((this.points[0].y - diagram.yAxis.minValue) * diagram.yScale + 50);
-                ctx.moveTo(x, y);
-                for(var i = 1; i < this.points.length; i++) {
-                    x = (this.points[i].x - diagram.xAxis.minValue) * diagram.xScale + 50;
-                    y = canvas.height - ((this.points[i].y - diagram.yAxis.minValue) * diagram.yScale + 50);
-                    ctx.lineTo(x, y);
+                    ctx.stroke();
+
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, this.style.lineWidth, 0, 2 * Math.PI);
+                    ctx.fill();
+                    ctx.stroke();
+
+                    ctx.moveTo(p.x, p.y);
                 }
                 break;
                 
@@ -47,7 +62,19 @@ class Graph {
                     }
                 }                            
                 break;
+
+            case "smooth":
+                const pts = catmullRomInterpolation(this.points, (canvas.width - 100) / 5);
+                var p = diagram.pointToPixel(pts[0]);
+
+                ctx.moveTo(p.x, p.y);
+                for(var pt = 1; pt < pts.length; pt++) {
+                    p = diagram.pointToPixel(pts[pt]);                    
+
+                    ctx.lineTo(p.x, p.y);
+                }                
         }
+        
         ctx.stroke();                
     }    
 }

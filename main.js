@@ -10,8 +10,15 @@ function setup() {
         { x: 4, y: 7 },
         { x: 5, y: 2 }
     ];    
+
+    var graph = new Graph(pts, "Temperature");
+    graph.style.lineColor = "#FF0000";
+    graph.style.lineWidth = 4;
     
-    diagram = new Diagram([new Graph(pts)], canvas);    
+    diagram = new Diagram([graph], canvas);    
+
+    diagram.xAxisTitle = "Time";
+    diagram.yAxisTitle = "Temperature";
     diagram.setAxisSize(0, 5, 0, 7);
     diagram.setStepSize(1, 1);    
 }
