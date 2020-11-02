@@ -1,28 +1,28 @@
-var diagram;
+var chart;
 
 function setup() {
-    //var canvas = document.getElementById("canvas");
-    var pts = [
-        { x: 0, y: 2 },
-        { x: 1, y: 1 },
-        { x: 2, y: 4 },
-        { x: 3, y: 1.5 },
-        { x: 4, y: 7 },
-        { x: 5, y: 2 }
+    var canvas = document.getElementById("canvas");
+    var pts = [        
+        new Point(10, 2),
+        new Point(10.5, 1),
+        new Point(11, 4),
+        new Point(11.5, 1.5),
+        new Point(12, 7),
+        new Point(12.5, 2)
     ];    
 
-    var graph = new Graph(pts, "Temperature");
-    graph.style.lineColor = "#FF0000";
-    graph.style.lineWidth = 4;
-    
-    diagram = new Diagram([graph], canvas);    
+    var data = [{
+        color : "red",
+        values: [2, 1, 4, 1.5, 7, 2]
+    }];
 
-    diagram.xAxisTitle = "Time";
-    diagram.yAxisTitle = "Temperature";
-    diagram.setAxisSize(0, 5, 0, 7);
-    diagram.setStepSize(1, 1);    
+    var categories = ["10:00", "10:30", "11:00", "11:30", "12:00", "12:30"];
+
+    chart = new CategoryChart(canvas, categories, data);
+    
+    chart.setValueRange(0, 10);
 }
 
 function update() {
-    diagram.draw();
+    chart.draw();
 }
